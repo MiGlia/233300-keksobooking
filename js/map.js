@@ -13,11 +13,19 @@ function getRandomArrayIndex(Array) {
 
 var offers = [];
 
-// Заполняем массив wizards объектами со случайными параметрами мага: name, coatColor, eyesColor.
+// Заполняем массив объектами параметрами:
 function createArrayOffers(offersCount) {
 
   for (var j = 0; j <= offersCount - 1; j++) {
-    offers.push({avatar: 'img/avatars/user(0 ' + getRandomArrayIndex(NUMBER_AVATAR_IMG) + ' .png'});
+    offers.push({
+      author: {
+        avatar: 'img/avatars/user0' + getRandomArrayIndex(NUMBER_AVATAR_IMG) + '.png'
+      },
+      offer: {
+        title: getRandomArrayIndex(OFFER_TITLE)
+      }
+    });
+
   }
 }
 createArrayOffers(8);

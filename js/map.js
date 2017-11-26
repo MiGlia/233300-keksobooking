@@ -200,5 +200,5 @@ var fragmentCards = document.createDocumentFragment();
 // Заполняем фрагмент данными из первого обьекта массива
 fragmentCards.appendChild(renderCardElement(nearbyOffers[0]));
 
-// Добавляем карточку недвижимости на страницу
+// Добавляем карточку недвижимости на страницу.
 mapParamSearch.appendChild(fragmentCards);

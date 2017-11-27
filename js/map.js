@@ -10,8 +10,8 @@ var OFFER_CHECKOUT = ['12:00', '13:00', '14:00'];
 var OFFER_PHOTOS = [];
 
 // Заполняем массив NUMBER_AVATAR_IMG
-function createArrayAvatar(Count) {
-  for (var i = 0; i < Count; i++) {
+function createArrayAvatar(count) {
+  for (var i = 0; i < count; i++) {
     NUMBER_AVATAR_IMG.push([i + 1]);
   }
   return NUMBER_AVATAR_IMG;
@@ -19,13 +19,13 @@ function createArrayAvatar(Count) {
 createArrayAvatar(8);
 
 // Возвращаем случайный элемент в массиве
-function getRandomArrayIndex(Array) {
-  return Array[Math.floor(Math.random() * Array.length)];
+function getRandomArrayIndex(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
 }
 
 // Возвращаем случайный элемент в массиве и сразу его удаляем из массива
-function getRandomNorepeatArrayIndex(Array) {
-  return Array.splice(Math.floor(Math.random() * Array.length), 1);
+function getRandomNorepeatArrayIndex(arr) {
+  return arr.splice(Math.floor(Math.random() * arr.length), 1);
 }
 
 // Возвращаем ислучайное число между min (включительно) и max (не включая max)
@@ -35,14 +35,14 @@ function getRandomValue(min, max) {
 
 // Коприруем и возвращаем массив OFFER_FEATURES со случайной длиной
 function getNewOfferFeatures() {
-  var NewOfferFeatures = OFFER_FEATURES.slice();
-  NewOfferFeatures.length = getRandomValue(1, 6);
-  return NewOfferFeatures;
+  var newOfferFeatures = OFFER_FEATURES.slice();
+  newOfferFeatures.length = getRandomValue(1, 6);
+  return newOfferFeatures;
 }
 
 // Делаем копии массивов (На всякий случай, не знаю нужно ли)
-function getCloneArray(Array) {
-  var сloneArray = Array.slice();
+function getCloneArray(arr) {
+  var сloneArray = arr.slice();
   return сloneArray;
 }
 
@@ -70,13 +70,13 @@ function renderMapPin(nearbyOffers) {
 }
 
 // находим шаблон для карточки с предложением аренды
-var ElementCardtemplate = document.querySelector('template').content.querySelector('.map__card');
+var elementCardtemplate = document.querySelector('template').content.querySelector('.map__card');
 
 // Заполняем карточки данными из массив offers
 function renderCardElement(nearbyOffers) {
 
 // копируем шаблон для карточки с предложением аренды
-  var mapElementCard = ElementCardtemplate.cloneNode(true);
+  var mapElementCard = elementCardtemplate.cloneNode(true);
 
   function getOfferType(value) {
 
@@ -95,13 +95,13 @@ function renderCardElement(nearbyOffers) {
   }
 
   // Находим все теги li удаляем у них классы и добавляем классы в соответствии с массивом features
-  function addItemClasses(array) {
+  function addItemClasses(arr) {
 
     var featureLiClass = mapElementCard.querySelectorAll('.popup__features > li');
-    for (var i = 0; i < array.length; i++) {
-      featureLiClass[i].remove('feature', 'feature--' + array[i]);
+    for (var i = 0; i < arr.length; i++) {
+      featureLiClass[i].remove('feature', 'feature--' + arr[i]);
       featureLiClass[i].classList.add('feature');
-      featureLiClass[i].classList.add('feature--' + array[i]);
+      featureLiClass[i].classList.add('feature--' + arr[i]);
     }
     return featureLiClass;
   }

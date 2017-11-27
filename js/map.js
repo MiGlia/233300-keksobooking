@@ -40,12 +40,6 @@ function getNewOfferFeatures() {
   return newOfferFeatures;
 }
 
-// Делаем копии массивов (На всякий случай, не знаю нужно ли)
-function getCloneArray(arr) {
-  var сloneArray = arr.slice();
-  return сloneArray;
-}
-
 var mapParamSearch = document.querySelector('.map');
 mapParamSearch.classList.remove('map--faded');
 
@@ -161,14 +155,14 @@ function createArrayOffers(nearbyOffersCount) {
         avatar: 'img/avatars/user0' + getRandomNorepeatArrayIndex(NUMBER_AVATAR_IMG) + '.png'
       },
       offer: {
-        title: getRandomNorepeatArrayIndex(getCloneArray(OFFER_TITLES)),
+        title: getRandomNorepeatArrayIndex(OFFER_TITLES),
         address: locationX + ', ' + locationY,
         price: getRandomValue(priceForRooms.min, priceForRooms.max),
-        type: getRandomArrayIndex(getCloneArray(OFFER_TYPES)),
+        type: getRandomArrayIndex(OFFER_TYPES),
         rooms: getRandomValue(numberOfrooms.min, numberOfrooms.max),
         guests: getRandomValue(numberOfguests.min, numberOfguests.max),
-        checkin: getRandomArrayIndex(getCloneArray(OFFER_CHECKIN)),
-        checkout: getRandomArrayIndex(getCloneArray(OFFER_CHECKOUT)),
+        checkin: getRandomArrayIndex(OFFER_CHECKIN),
+        checkout: getRandomArrayIndex(OFFER_CHECKOUT),
         features: getNewOfferFeatures(),
         description: '',
         photos: OFFER_PHOTOS

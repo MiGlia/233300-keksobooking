@@ -41,7 +41,7 @@ function getNewOfferFeatures() {
 }
 
 var mapParamSearch = document.querySelector('.map');
-mapParamSearch.classList.remove('map--faded');
+// mapParamSearch.classList.remove('map--faded');
 
 var mapPinTemplate = document.querySelector('template').content.querySelector('.map__pin');
 
@@ -186,7 +186,7 @@ function getRenderMapPin() {
   }
   mapPinSimilar.appendChild(fragmentMapPin);
 }
-getRenderMapPin();
+// getRenderMapPin();
 
 // Создаем новый пустой фрагмент для карточки
 var fragmentCards = document.createDocumentFragment();
@@ -195,4 +195,60 @@ var fragmentCards = document.createDocumentFragment();
 fragmentCards.appendChild(renderCardElement(nearbyOffers[0]));
 
 // Добавляем карточку недвижимости на страницу.
-mapParamSearch.appendChild(fragmentCards);
+// mapParamSearch.appendChild(fragmentCards);
+
+
+var noticeForm = document.querySelector('.notice__form');
+var fieldsetsList = noticeForm.querySelectorAll('fieldset');
+var mainPin = mapParamSearch.querySelector('.map__pin--main');
+
+// Добавляем всем 'fieldset' атрибут disabled
+function addElementsAttribute(arr) {
+  for (var i = 0; i < arr.length; i++) {
+    // arr[i].disabled = true;
+    arr[i].setAttribute('disabled', 'disabled');
+  }
+}
+
+function removeElementsAttribute(arr) {
+  for (var i = 0; i < arr.length; i++) {
+    arr[i].disabled = false;
+    // arr[i].setAttribute('disabled', 'disabled');
+  }
+}
+
+// акивация формы
+addElementsAttribute(fieldsetsList);
+mainPin.addEventListener('mouseup', function () {
+  mapParamSearch.classList.remove('map--faded');
+  removeElementsAttribute(fieldsetsList);
+  noticeForm.classList.remove('notice__form--disabled');
+  getRenderMapPin();
+  // mapParamSearch.appendChild(fragmentCards);
+
+});
+
+// //  Обьявляем функцию для открытия окна
+// function openPopup() {
+//   setup.classList.remove('hidden');
+//   document.addEventListener('keydown', onPopupEscPress);
+// }
+var fragmentMapPin = document.createDocumentFragment();
+var cardsArr = fragmentCards.querySelectorAll('.popup');
+var mapPinsArr = fragmentMapPin.querySelectorAll('map__pin');
+
+// function addElementsClass(arr) {
+//   for (var i = 0; i < arr.length; i++) {
+//     arr[i].classList.add('hidden');
+//   }
+// }
+//
+//
+//
+// addElementsClass(mapPinsArr);
+
+mapPinsArr.addEventListener('click', function () {
+  for (var i = 0; i < mapPinsArr.length; i++) {
+    mapPinsArr[i].classList.add('map__pin--active');
+  }
+});

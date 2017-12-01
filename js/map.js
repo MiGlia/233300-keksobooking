@@ -180,7 +180,7 @@ createArrayOffers(8);
 // Группируем элементы(метку с классои map__pin), Вставляем заполненные элементы в DOM и отрсовываем их
 function getRenderMapPin() {
 
-  var fragmentMapPin = document.createDocumentFragment();
+  // var fragmentMapPin = document.createDocumentFragment();
   for (var i = 0; i < nearbyOffers.length; i++) {
     fragmentMapPin.appendChild(renderMapPin(nearbyOffers[i]));
   }
@@ -192,8 +192,14 @@ function getRenderMapPin() {
 var fragmentCards = document.createDocumentFragment();
 
 // Заполняем фрагмент данными из первого обьекта массива
-fragmentCards.appendChild(renderCardElement(nearbyOffers[0]));
+function sdf() {
 
+
+  for (var i = 0; i < nearbyOffers.length; i++) {
+    fragmentCards.appendChild(renderCardElement(nearbyOffers[i]));
+  }
+}
+sdf();
 // Добавляем карточку недвижимости на страницу.
 // mapParamSearch.appendChild(fragmentCards);
 
@@ -205,8 +211,8 @@ var mainPin = mapParamSearch.querySelector('.map__pin--main');
 // Добавляем всем 'fieldset' атрибут disabled
 function addElementsAttribute(arr) {
   for (var i = 0; i < arr.length; i++) {
-    // arr[i].disabled = true;
-    arr[i].setAttribute('disabled', 'disabled');
+    arr[i].disabled = true;
+    // arr[i].setAttribute('disabled', 'disabled');
   }
 }
 
@@ -217,38 +223,56 @@ function removeElementsAttribute(arr) {
   }
 }
 
-// акивация формы
+mapParamSearch.appendChild(fragmentCards);
+
+// Находим все карточки товаров и добавляем им класс hidden
+var cardsArr = mapParamSearch.querySelectorAll('.popup');
+var fragmentMapPin = document.createDocumentFragment();
+
+function addElementsClass(arr) {
+  for (var i = 0; i < arr.length; i++) {
+    arr[i].classList.add('hidden');
+  }
+}
+addElementsClass(cardsArr);
+
 addElementsAttribute(fieldsetsList);
+
+// акивация карты и формы
 mainPin.addEventListener('mouseup', function () {
   mapParamSearch.classList.remove('map--faded');
   removeElementsAttribute(fieldsetsList);
   noticeForm.classList.remove('notice__form--disabled');
   getRenderMapPin();
-  // mapParamSearch.appendChild(fragmentCards);
-
 });
 
-// //  Обьявляем функцию для открытия окна
-// function openPopup() {
-//   setup.classList.remove('hidden');
-//   document.addEventListener('keydown', onPopupEscPress);
-// }
-var fragmentMapPin = document.createDocumentFragment();
-var cardsArr = fragmentCards.querySelectorAll('.popup');
-var mapPinsArr = fragmentMapPin.querySelectorAll('map__pin');
+var mapPinsArr = mapParamSearch.querySelectorAll('.map__pin');
 
-// function addElementsClass(arr) {
-//   for (var i = 0; i < arr.length; i++) {
-//     arr[i].classList.add('hidden');
-//   }
-// }
-//
-//
-//
-// addElementsClass(mapPinsArr);
-
-mapPinsArr.addEventListener('click', function () {
+function openPopup(evt) {
   for (var i = 0; i < mapPinsArr.length; i++) {
-    mapPinsArr[i].classList.add('map__pin--active');
+    if (evt.currentTarget === mapPinsArr[i] && evt.currentTarget !== mainPin) {
+      mapPinsArr[i].classList.add('map__pin--active');
+      cardsArr[i].classList.remove('hidden');
+    }
+
+    if (evt.currentTarget !== mapPinsArr[i]) {
+      mapPinsArr[i].classList.remove('map__pin--active');
+      cardsArr[i].classList.add('hidden');
+    }
   }
-});
+}
+
+function closePopup() {
+  for (var i = 0; i < mapPinsArr.length; i++) {
+    if (mapPinsArr[i].classList.contains('map__pin--active')) {
+      cardsArr[i].classList.add('hidden');
+      mapPinsArr[i].classList.remove('map__pin--active');
+    }
+  }
+}
+
+for (var i = 0; i < mapPinsArr.length; i++) {
+  mapPinsArr[i].addEventListener('click', openPopup);
+
+  cardsArr[i].addEventListener('click', closePopup);
+}

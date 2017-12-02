@@ -291,7 +291,7 @@ var onPopupEscPress = function (evt) {
 
 var onPopupEnterPress = function (evt) {
   if (evt.keyCode === ENTER_KEYCODE) {
-    openPopup();
+    closePopup();
   }
 };
 

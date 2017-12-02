@@ -8,6 +8,8 @@ var OFFER_FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'co
 var OFFER_CHECKIN = ['12:00', '13:00', '14:00'];
 var OFFER_CHECKOUT = ['12:00', '13:00', '14:00'];
 var OFFER_PHOTOS = [];
+var ESC_KEYCODE = 27;
+var ENTER_KEYCODE = 13;
 
 // Заполняем массив NUMBER_AVATAR_IMG
 function createArrayAvatar(count) {
@@ -192,14 +194,14 @@ function getRenderMapPin() {
 var fragmentCards = document.createDocumentFragment();
 
 // Заполняем фрагмент данными из первого обьекта массива
-function sdf() {
+function addDateToCard() {
 
 
   for (var i = 0; i < nearbyOffers.length; i++) {
     fragmentCards.appendChild(renderCardElement(nearbyOffers[i]));
   }
 }
-sdf();
+addDateToCard();
 // Добавляем карточку недвижимости на страницу.
 // mapParamSearch.appendChild(fragmentCards);
 
@@ -208,71 +210,98 @@ var noticeForm = document.querySelector('.notice__form');
 var fieldsetsList = noticeForm.querySelectorAll('fieldset');
 var mainPin = mapParamSearch.querySelector('.map__pin--main');
 
-// Добавляем всем 'fieldset' атрибут disabled
+// Добавление всем 'fieldset' атрибут disabled
 function addElementsAttribute(arr) {
   for (var i = 0; i < arr.length; i++) {
     arr[i].disabled = true;
-    // arr[i].setAttribute('disabled', 'disabled');
   }
 }
+
+addElementsAttribute(fieldsetsList);
 
 function removeElementsAttribute(arr) {
   for (var i = 0; i < arr.length; i++) {
     arr[i].disabled = false;
-    // arr[i].setAttribute('disabled', 'disabled');
   }
 }
 
+// Добавляем карточку недвижимости на страницу.
 mapParamSearch.appendChild(fragmentCards);
 
 // Находим все карточки товаров и добавляем им класс hidden
-var cardsArr = mapParamSearch.querySelectorAll('.popup');
+var cardsList = mapParamSearch.querySelectorAll('.popup');
 var fragmentMapPin = document.createDocumentFragment();
+
+// находим все метки на карте(У меня находит только главную метку не могу понять почему?)
+var mapPinsList = mapParamSearch.querySelectorAll('.map__pin');
 
 function addElementsClass(arr) {
   for (var i = 0; i < arr.length; i++) {
     arr[i].classList.add('hidden');
   }
 }
-addElementsClass(cardsArr);
-
-addElementsAttribute(fieldsetsList);
+addElementsClass(cardsList);
 
 // акивация карты и формы
-mainPin.addEventListener('mouseup', function () {
-  mapParamSearch.classList.remove('map--faded');
-  removeElementsAttribute(fieldsetsList);
-  noticeForm.classList.remove('notice__form--disabled');
-  getRenderMapPin();
-});
+function mapActive() {
 
-var mapPinsArr = mapParamSearch.querySelectorAll('.map__pin');
+  mainPin.addEventListener('mouseup', function () {
+    mapParamSearch.classList.remove('map--faded');
+    removeElementsAttribute(fieldsetsList);
+    noticeForm.classList.remove('notice__form--disabled');
+    // Каждый раз при нажатии у меня генертруется 8 меток(Это наверное не очень, Но пока оставил здесь)
+    getRenderMapPin();
+  });
+}
 
+mapActive();
+
+// Открытие\закрытие карточек предложений (если обрабатывается событие на элемент[i], и не на главной метке, то..)
 function openPopup(evt) {
-  for (var i = 0; i < mapPinsArr.length; i++) {
-    if (evt.currentTarget === mapPinsArr[i] && evt.currentTarget !== mainPin) {
-      mapPinsArr[i].classList.add('map__pin--active');
-      cardsArr[i].classList.remove('hidden');
+  for (var i = 0; i < mapPinsList.length; i++) {
+    if (evt.currentTarget === mapPinsList[i] && evt.currentTarget !== mainPin) {
+      mapPinsList[i].classList.add('map__pin--active');
+      cardsList[i].classList.remove('hidden');
     }
-
-    if (evt.currentTarget !== mapPinsArr[i]) {
-      mapPinsArr[i].classList.remove('map__pin--active');
-      cardsArr[i].classList.add('hidden');
+    // убираем классы pin--active с другой метки и скрываем карточку не активного элемента
+    if (evt.currentTarget !== mapPinsList[i]) {
+      mapPinsList[i].classList.remove('map__pin--active');
+      cardsList[i].classList.add('hidden');
     }
+    document.addEventListener('keydown', onPopupEscPress);
   }
 }
 
+// При закрвтии если метка содержит класс 'map__pin--active' убираем ее, карточку товара скрываем
 function closePopup() {
-  for (var i = 0; i < mapPinsArr.length; i++) {
-    if (mapPinsArr[i].classList.contains('map__pin--active')) {
-      cardsArr[i].classList.add('hidden');
-      mapPinsArr[i].classList.remove('map__pin--active');
+  for (var i = 0; i < mapPinsList.length; i++) {
+    if (mapPinsList[i].classList.contains('map__pin--active')) {
+      cardsList[i].classList.add('hidden');
+      mapPinsList[i].classList.remove('map__pin--active');
     }
   }
+  document.removeEventListener('keydown', onPopupEscPress);
 }
 
-for (var i = 0; i < mapPinsArr.length; i++) {
-  mapPinsArr[i].addEventListener('click', openPopup);
+var onPopupEscPress = function (evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    closePopup();
+  }
+};
 
-  cardsArr[i].addEventListener('click', closePopup);
+var onPopupEnterPress = function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    openPopup();
+  }
+};
+
+// Навешиваем обработчики событий
+for (var i = 0; i < mapPinsList.length; i++) {
+
+  mapPinsList[i].addEventListener('click', openPopup);
+  var popupClose = cardsList[i].querySelector('popup__close');
+
+  // Здесь у меня не получается навесить обработчик, popupClose djpdhfotn null(((
+  popupClose.addEventListener('click', closePopup);
+  popupClose.addEventListener('keydown', onPopupEnterPress);
 }

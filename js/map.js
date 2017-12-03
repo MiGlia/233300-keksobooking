@@ -60,7 +60,7 @@ function renderMapPin(nearbyOffers) {
 
   mapPinElement.querySelector('img').src = nearbyOffers.author.avatar;
   mapPinElement.style.left = (nearbyOffers.location.x - pinHalfWidth) + 'px';
-  mapPinElement.style.top = (nearbyOffers.location.x - pinHeight) + 'px';
+  mapPinElement.style.top = (nearbyOffers.location.y - pinHeight) + 'px';
 
   return mapPinElement;
 }
@@ -178,7 +178,7 @@ function createArrayOffers(nearbyOffersCount) {
   }
 }
 createArrayOffers(8);
-
+var fragmentMapPin = document.createDocumentFragment();
 // Группируем элементы(метку с классои map__pin), Вставляем заполненные элементы в DOM и отрсовываем их
 function getRenderMapPin() {
 
@@ -187,6 +187,7 @@ function getRenderMapPin() {
     fragmentMapPin.appendChild(renderMapPin(nearbyOffers[i]));
   }
   mapPinSimilar.appendChild(fragmentMapPin);
+  return fragmentMapPin;
 }
 // getRenderMapPin();
 
@@ -230,10 +231,11 @@ mapParamSearch.appendChild(fragmentCards);
 
 // Находим все карточки товаров и добавляем им класс hidden
 var cardsList = mapParamSearch.querySelectorAll('.popup');
-var fragmentMapPin = document.createDocumentFragment();
+// var fragmentMapPin = document.createDocumentFragment();
+var mapPinsList = fragmentMapPin.querySelectorAll('.map__pin');
 
 // находим все метки на карте(У меня находит только главную метку не могу понять почему?)
-var mapPinsList = mapParamSearch.querySelectorAll('.map__pin');
+
 
 function addElementsClass(arr) {
   for (var i = 0; i < arr.length; i++) {
@@ -245,17 +247,17 @@ addElementsClass(cardsList);
 // акивация карты и формы
 function mapActive() {
 
-  mainPin.addEventListener('mouseup', function () {
-    mapParamSearch.classList.remove('map--faded');
-    removeElementsAttribute(fieldsetsList);
-    noticeForm.classList.remove('notice__form--disabled');
-    // Каждый раз при нажатии у меня генертруется 8 меток(Это наверное не очень, Но пока оставил здесь)
-    getRenderMapPin();
-  });
+  mapParamSearch.classList.remove('map--faded');
+  removeElementsAttribute(fieldsetsList);
+  noticeForm.classList.remove('notice__form--disabled');
+  // Каждый раз при нажатии у меня генертруется 8 меток(Это наверное не очень, Но пока оставил здесь)
+  getRenderMapPin();
 }
 
-mapActive();
-
+mainPin.addEventListener('mouseup', function () {
+  mapActive();
+}
+);
 // Открытие\закрытие карточек предложений (если обрабатывается событие на элемент[i], и не на главной метке, то..)
 function openPopup(evt) {
   for (var i = 0; i < mapPinsList.length; i++) {
@@ -300,8 +302,8 @@ for (var i = 0; i < mapPinsList.length; i++) {
 
   mapPinsList[i].addEventListener('click', openPopup);
   var popupClose = cardsList[i].querySelector('popup__close');
-
   // Здесь у меня не получается навесить обработчик, popupClose djpdhfotn null(((
-  popupClose.addEventListener('click', closePopup);
-  popupClose.addEventListener('keydown', onPopupEnterPress);
 }
+
+popupClose.addEventListener('click', closePopup);
+popupClose.addEventListener('keydown', onPopupEnterPress);

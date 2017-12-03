@@ -180,15 +180,15 @@ function createArrayOffers(nearbyOffersCount) {
 createArrayOffers(8);
 var fragmentMapPin = document.createDocumentFragment();
 // Группируем элементы(метку с классои map__pin), Вставляем заполненные элементы в DOM и отрсовываем их
-function getRenderMapPin() {
-
-  // var fragmentMapPin = document.createDocumentFragment();
-  for (var i = 0; i < nearbyOffers.length; i++) {
-    fragmentMapPin.appendChild(renderMapPin(nearbyOffers[i]));
-  }
-  mapPinSimilar.appendChild(fragmentMapPin);
-  return fragmentMapPin;
-}
+// function getRenderMapPin() {
+//
+//   // var fragmentMapPin = document.createDocumentFragment();
+//   for (var i = 0; i < nearbyOffers.length; i++) {
+//     fragmentMapPin.appendChild(renderMapPin(nearbyOffers[i]));
+//   }
+//   mapPinSimilar.appendChild(fragmentMapPin);
+//   return fragmentMapPin;
+// }
 // getRenderMapPin();
 
 // Создаем новый пустой фрагмент для карточки
@@ -203,6 +203,16 @@ function addDateToCard() {
   }
 }
 addDateToCard();
+
+function getRenderMapPin() {
+
+  // var fragmentMapPin = document.createDocumentFragment();
+  for (var i = 0; i < nearbyOffers.length; i++) {
+    fragmentMapPin.appendChild(renderMapPin(nearbyOffers[i]));
+  }
+  // mapPinSimilar.appendChild(fragmentMapPin);
+}
+getRenderMapPin();
 // Добавляем карточку недвижимости на страницу.
 // mapParamSearch.appendChild(fragmentCards);
 
@@ -231,11 +241,6 @@ mapParamSearch.appendChild(fragmentCards);
 
 // Находим все карточки товаров и добавляем им класс hidden
 var cardsList = mapParamSearch.querySelectorAll('.popup');
-// var fragmentMapPin = document.createDocumentFragment();
-var mapPinsList = fragmentMapPin.querySelectorAll('.map__pin');
-
-// находим все метки на карте(У меня находит только главную метку не могу понять почему?)
-
 
 function addElementsClass(arr) {
   for (var i = 0; i < arr.length; i++) {
@@ -251,59 +256,14 @@ function mapActive() {
   removeElementsAttribute(fieldsetsList);
   noticeForm.classList.remove('notice__form--disabled');
   // Каждый раз при нажатии у меня генертруется 8 меток(Это наверное не очень, Но пока оставил здесь)
-  getRenderMapPin();
+  // getRenderMapPin();
 }
 
 mainPin.addEventListener('mouseup', function () {
   mapActive();
+  mapPinSimilar.appendChild(fragmentMapPin);
+  mapParamSearch.appendChild(fragmentCards);
 }
 );
-// Открытие\закрытие карточек предложений (если обрабатывается событие на элемент[i], и не на главной метке, то..)
-function openPopup(evt) {
-  for (var i = 0; i < mapPinsList.length; i++) {
-    if (evt.currentTarget === mapPinsList[i] && evt.currentTarget !== mainPin) {
-      mapPinsList[i].classList.add('map__pin--active');
-      cardsList[i].classList.remove('hidden');
-    }
-    // убираем классы pin--active с другой метки и скрываем карточку не активного элемента
-    if (evt.currentTarget !== mapPinsList[i]) {
-      mapPinsList[i].classList.remove('map__pin--active');
-      cardsList[i].classList.add('hidden');
-    }
-    document.addEventListener('keydown', onPopupEscPress);
-  }
-}
 
-// При закрвтии если метка содержит класс 'map__pin--active' убираем ее, карточку товара скрываем
-function closePopup() {
-  for (var i = 0; i < mapPinsList.length; i++) {
-    if (mapPinsList[i].classList.contains('map__pin--active')) {
-      cardsList[i].classList.add('hidden');
-      mapPinsList[i].classList.remove('map__pin--active');
-    }
-  }
-  document.removeEventListener('keydown', onPopupEscPress);
-}
-
-var onPopupEscPress = function (evt) {
-  if (evt.keyCode === ESC_KEYCODE) {
-    closePopup();
-  }
-};
-
-var onPopupEnterPress = function (evt) {
-  if (evt.keyCode === ENTER_KEYCODE) {
-    closePopup();
-  }
-};
-
-// Навешиваем обработчики событий
-for (var i = 0; i < mapPinsList.length; i++) {
-
-  mapPinsList[i].addEventListener('click', openPopup);
-  var popupClose = cardsList[i].querySelector('popup__close');
-  // Здесь у меня не получается навесить обработчик, popupClose djpdhfotn null(((
-}
-
-popupClose.addEventListener('click', closePopup);
-popupClose.addEventListener('keydown', onPopupEnterPress);
+var mapPinsList = fragmentMapPin.querySelectorAll('.map__pin');

@@ -43,7 +43,6 @@ function getNewOfferFeatures() {
 }
 
 var mapParamSearch = document.querySelector('.map');
-// mapParamSearch.classList.remove('map--faded');
 
 var mapPinTemplate = document.querySelector('template').content.querySelector('.map__pin');
 
@@ -179,17 +178,6 @@ function createArrayOffers(nearbyOffersCount) {
 }
 createArrayOffers(8);
 var fragmentMapPin = document.createDocumentFragment();
-// Группируем элементы(метку с классои map__pin), Вставляем заполненные элементы в DOM и отрсовываем их
-// function getRenderMapPin() {
-//
-//   // var fragmentMapPin = document.createDocumentFragment();
-//   for (var i = 0; i < nearbyOffers.length; i++) {
-//     fragmentMapPin.appendChild(renderMapPin(nearbyOffers[i]));
-//   }
-//   mapPinSimilar.appendChild(fragmentMapPin);
-//   return fragmentMapPin;
-// }
-// getRenderMapPin();
 
 // Создаем новый пустой фрагмент для карточки
 var fragmentCards = document.createDocumentFragment();
@@ -204,18 +192,14 @@ function addDateToCard() {
 }
 addDateToCard();
 
+// Группируем элементы(метку с классои map__pin) и вставляем во фрагмент
 function getRenderMapPin() {
 
-  // var fragmentMapPin = document.createDocumentFragment();
   for (var i = 0; i < nearbyOffers.length; i++) {
     fragmentMapPin.appendChild(renderMapPin(nearbyOffers[i]));
   }
-  // mapPinSimilar.appendChild(fragmentMapPin);
 }
 getRenderMapPin();
-// Добавляем карточку недвижимости на страницу.
-// mapParamSearch.appendChild(fragmentCards);
-
 
 var noticeForm = document.querySelector('.notice__form');
 var fieldsetsList = noticeForm.querySelectorAll('fieldset');
@@ -249,21 +233,68 @@ function addElementsClass(arr) {
 }
 addElementsClass(cardsList);
 
-// акивация карты и формы
+// функия акивации карты и формы
 function mapActive() {
-
   mapParamSearch.classList.remove('map--faded');
   removeElementsAttribute(fieldsetsList);
   noticeForm.classList.remove('notice__form--disabled');
-  // Каждый раз при нажатии у меня генертруется 8 меток(Это наверное не очень, Но пока оставил здесь)
-  // getRenderMapPin();
-}
-
-mainPin.addEventListener('mouseup', function () {
-  mapActive();
+  // вставляем карточки и метки на страницу
   mapPinSimilar.appendChild(fragmentMapPin);
   mapParamSearch.appendChild(fragmentCards);
 }
+
+// акивации карты и формы после отжаития клавиши мыши
+mainPin.addEventListener('mouseup', function () {
+  mapActive();
+}
 );
 
+// находим все метки '.map__pin'
 var mapPinsList = fragmentMapPin.querySelectorAll('.map__pin');
+
+// Открытие\закрытие карточек предложений (если обрабатывается событие на элемент[i], и не на главной метке, то..)
+function openPopup(evt) {
+  for (var i = 0; i < mapPinsList.length; i++) {
+    if (evt.currentTarget === mapPinsList[i] && evt.currentTarget !== mainPin) {
+      mapPinsList[i].classList.add('map__pin--active');
+      cardsList[i].classList.remove('hidden');
+    }
+    // убираем классы pin--active с другой метки и скрываем карточку не активного элемента
+    if (evt.currentTarget !== mapPinsList[i]) {
+      mapPinsList[i].classList.remove('map__pin--active');
+      cardsList[i].classList.add('hidden');
+    }
+    document.addEventListener('keydown', onPopupEscPress);
+  }
+}
+
+// При закрытии если метка содержит класс 'map__pin--active' убираем ее, карточку товара скрываем
+function closePopup() {
+  for (var i = 0; i < mapPinsList.length; i++) {
+    if (mapPinsList[i].classList.contains('map__pin--active')) {
+      cardsList[i].classList.add('hidden');
+      mapPinsList[i].classList.remove('map__pin--active');
+    }
+  }
+  document.removeEventListener('keydown', onPopupEscPress);
+}
+
+var onPopupEscPress = function (evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    closePopup();
+  }
+};
+
+var onPopupEnterPress = function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    closePopup();
+  }
+};
+
+// Навешиваем обработчики событий(я оставил в цикле, работает) (Но, если нельзя придется фунуции открытия закрыти как я понимаю переделывать:( )))
+for (var i = 0; i < mapPinsList.length; i++) {
+  var popupClose = cardsList[i].querySelector('.popup__close');
+  mapPinsList[i].addEventListener('click', openPopup);
+  popupClose.addEventListener('click', closePopup);
+  popupClose.addEventListener('keydown', onPopupEnterPress);
+}

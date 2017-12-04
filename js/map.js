@@ -8,6 +8,8 @@ var OFFER_FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'co
 var OFFER_CHECKIN = ['12:00', '13:00', '14:00'];
 var OFFER_CHECKOUT = ['12:00', '13:00', '14:00'];
 var OFFER_PHOTOS = [];
+var ESC_KEYCODE = 27;
+var ENTER_KEYCODE = 13;
 
 // Заполняем массив NUMBER_AVATAR_IMG
 function createArrayAvatar(count) {
@@ -41,7 +43,6 @@ function getNewOfferFeatures() {
 }
 
 var mapParamSearch = document.querySelector('.map');
-mapParamSearch.classList.remove('map--faded');
 
 var mapPinTemplate = document.querySelector('template').content.querySelector('.map__pin');
 
@@ -58,7 +59,7 @@ function renderMapPin(nearbyOffers) {
 
   mapPinElement.querySelector('img').src = nearbyOffers.author.avatar;
   mapPinElement.style.left = (nearbyOffers.location.x - pinHalfWidth) + 'px';
-  mapPinElement.style.top = (nearbyOffers.location.x - pinHeight) + 'px';
+  mapPinElement.style.top = (nearbyOffers.location.y - pinHeight) + 'px';
 
   return mapPinElement;
 }
@@ -176,23 +177,124 @@ function createArrayOffers(nearbyOffersCount) {
   }
 }
 createArrayOffers(8);
-
-// Группируем элементы(метку с классои map__pin), Вставляем заполненные элементы в DOM и отрсовываем их
-function getRenderMapPin() {
-
-  var fragmentMapPin = document.createDocumentFragment();
-  for (var i = 0; i < nearbyOffers.length; i++) {
-    fragmentMapPin.appendChild(renderMapPin(nearbyOffers[i]));
-  }
-  mapPinSimilar.appendChild(fragmentMapPin);
-}
-getRenderMapPin();
+var fragmentMapPin = document.createDocumentFragment();
 
 // Создаем новый пустой фрагмент для карточки
 var fragmentCards = document.createDocumentFragment();
 
 // Заполняем фрагмент данными из первого обьекта массива
-fragmentCards.appendChild(renderCardElement(nearbyOffers[0]));
+function addDateToCard() {
+
+
+  for (var i = 0; i < nearbyOffers.length; i++) {
+    fragmentCards.appendChild(renderCardElement(nearbyOffers[i]));
+  }
+}
+addDateToCard();
+
+// Группируем элементы(метку с классои map__pin) и вставляем во фрагмент
+function getRenderMapPin() {
+
+  for (var i = 0; i < nearbyOffers.length; i++) {
+    fragmentMapPin.appendChild(renderMapPin(nearbyOffers[i]));
+  }
+}
+getRenderMapPin();
+
+var noticeForm = document.querySelector('.notice__form');
+var fieldsetsList = noticeForm.querySelectorAll('fieldset');
+var mainPin = mapParamSearch.querySelector('.map__pin--main');
+
+// Добавление всем 'fieldset' атрибут disabled
+function addElementsAttribute(arr) {
+  for (var i = 0; i < arr.length; i++) {
+    arr[i].disabled = true;
+  }
+}
+
+addElementsAttribute(fieldsetsList);
+
+function removeElementsAttribute(arr) {
+  for (var i = 0; i < arr.length; i++) {
+    arr[i].disabled = false;
+  }
+}
 
 // Добавляем карточку недвижимости на страницу.
 mapParamSearch.appendChild(fragmentCards);
+
+// Находим все карточки товаров и добавляем им класс hidden
+var cardsList = mapParamSearch.querySelectorAll('.popup');
+
+function addElementsClass(arr) {
+  for (var i = 0; i < arr.length; i++) {
+    arr[i].classList.add('hidden');
+  }
+}
+addElementsClass(cardsList);
+
+// функия акивации карты и формы
+function mapActive() {
+  mapParamSearch.classList.remove('map--faded');
+  removeElementsAttribute(fieldsetsList);
+  noticeForm.classList.remove('notice__form--disabled');
+  // вставляем карточки и метки на страницу
+  mapPinSimilar.appendChild(fragmentMapPin);
+  mapParamSearch.appendChild(fragmentCards);
+}
+
+// акивации карты и формы после отжаития клавиши мыши
+mainPin.addEventListener('mouseup', function () {
+  mapActive();
+}
+);
+
+// находим все метки '.map__pin'
+var mapPinsList = fragmentMapPin.querySelectorAll('.map__pin');
+
+// Открытие\закрытие карточек предложений (если обрабатывается событие на элемент[i], и не на главной метке, то..)
+function openPopup(evt) {
+  for (var i = 0; i < mapPinsList.length; i++) {
+    if (evt.currentTarget === mapPinsList[i] && evt.currentTarget !== mainPin) {
+      mapPinsList[i].classList.add('map__pin--active');
+      cardsList[i].classList.remove('hidden');
+    }
+    // убираем классы pin--active с другой метки и скрываем карточку не активного элемента
+    if (evt.currentTarget !== mapPinsList[i]) {
+      mapPinsList[i].classList.remove('map__pin--active');
+      cardsList[i].classList.add('hidden');
+    }
+    document.addEventListener('keydown', onPopupEscPress);
+  }
+}
+
+// При закрытии если метка содержит класс 'map__pin--active' убираем ее, карточку товара скрываем
+function closePopup() {
+  for (var i = 0; i < mapPinsList.length; i++) {
+    if (mapPinsList[i].classList.contains('map__pin--active')) {
+      cardsList[i].classList.add('hidden');
+      mapPinsList[i].classList.remove('map__pin--active');
+    }
+  }
+  document.removeEventListener('keydown', onPopupEscPress);
+}
+
+var onPopupEscPress = function (evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    closePopup();
+  }
+};
+
+var onPopupEnterPress = function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    closePopup();
+  }
+};
+
+// Навешиваем обработчики событий(я оставил в цикле, работает) (Но, если нельзя придется фунуции открытия закрыти как я понимаю переделывать:( )))
+for (var i = 0; i < mapPinsList.length; i++) {
+  var popupClose = cardsList[i].querySelector('.popup__close');
+  mapPinsList[i].addEventListener('click', openPopup);
+  popupClose.addEventListener('click', closePopup);
+  popupClose.addEventListener('keydown', onPopupEnterPress);
+}

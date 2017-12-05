@@ -184,8 +184,6 @@ var fragmentCards = document.createDocumentFragment();
 
 // Заполняем фрагмент данными из первого обьекта массива
 function addDateToCard() {
-
-
   for (var i = 0; i < nearbyOffers.length; i++) {
     fragmentCards.appendChild(renderCardElement(nearbyOffers[i]));
   }
@@ -194,7 +192,6 @@ addDateToCard();
 
 // Группируем элементы(метку с классои map__pin) и вставляем во фрагмент
 function getRenderMapPin() {
-
   for (var i = 0; i < nearbyOffers.length; i++) {
     fragmentMapPin.appendChild(renderMapPin(nearbyOffers[i]));
   }
@@ -298,3 +295,44 @@ for (var i = 0; i < mapPinsList.length; i++) {
   popupClose.addEventListener('click', closePopup);
   popupClose.addEventListener('keydown', onPopupEnterPress);
 }
+
+var chcekIn = noticeForm.querySelector('#timein');
+var chcekOut = noticeForm.querySelector('#timeout');
+//
+// function functionName() {
+//   switch (chcekIn.value) {
+//     case '12:00':
+//       chcekOut.value = chcekIn.value;
+//       break;
+//     case '13:00':
+//       chcekOut.value = chcekIn.value;
+//       break;
+//     case '14:00':
+//       chcekOut.value = chcekIn.value;
+//       break;
+//   }
+// }
+//
+// chcekIn.addEventListener('change', functionName);
+
+function syncCheckInOut(chcekInValue, chcekOutValue) {
+  switch (chcekInValue.value) {
+    case '12:00':
+      chcekOutValue.value = chcekInValue.value;
+      break;
+    case '13:00':
+      chcekOutValue.value = chcekInValue.value;
+      break;
+    case '14:00':
+      chcekOutValue.value = chcekInValue.value;
+      break;
+  }
+}
+
+chcekIn.addEventListener('change', function () {
+  syncCheckInOut(chcekIn, chcekOut);
+});
+
+chcekOut.addEventListener('change', function () {
+  syncCheckInOut(chcekOut, chcekIn);
+});

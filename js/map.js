@@ -336,3 +336,54 @@ chcekIn.addEventListener('change', function () {
 chcekOut.addEventListener('change', function () {
   syncCheckInOut(chcekOut, chcekIn);
 });
+
+var priceForNight = noticeForm.querySelector('#price');
+var typeOfHouse = noticeForm.querySelector('#type');
+
+priceForNight.setAttribute('value', 0);
+
+function sincPriceToNigth() {
+  switch (typeOfHouse.value) {
+    case 'flat':
+      priceForNight.setAttribute('value', 0);
+      break;
+    case 'bungalo':
+      priceForNight.setAttribute('value', 1000);
+      break;
+    case 'house':
+      priceForNight.setAttribute('value', 5000);
+      break;
+    case 'palace':
+      priceForNight.setAttribute('value', 10000);
+      break;
+  }
+}
+
+typeOfHouse.addEventListener('change', sincPriceToNigth);
+
+var numberOfRooms = noticeForm.elements.rooms;
+var numberOfBedrooms = noticeForm.elements.capacity;
+
+// var inputNumberOfRoomsOptions = inputNumberOfRooms.querySelectorAll('option');
+// var inputNumberOfBedroomsOptions = inputNumberOfBedrooms.querySelector('option');
+
+function functionName() {
+  for (var j = 0; j < numberOfRooms.options.length; j++) {
+    var option = numberOfRooms.options[j];
+    if (option.value === '1') {
+      numberOfBedrooms[2].setAttribute('disabled', 'disabled');
+    }
+  }
+}
+
+function functionNameReset() {
+  for (var j = 0; j < numberOfBedrooms.options.length; j++) {
+    numberOfBedrooms[j].removeAttribute('disabled', 'disabled');
+  }
+}
+
+
+var avc = noticeForm.querySelector('#room_number');
+var avcn = noticeForm.querySelector('#capacity');
+
+avc.addEventListener('change', functionName);

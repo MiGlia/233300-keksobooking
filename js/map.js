@@ -363,27 +363,72 @@ typeOfHouse.addEventListener('change', sincPriceToNigth);
 
 var numberOfRooms = noticeForm.elements.rooms;
 var numberOfBedrooms = noticeForm.elements.capacity;
+// var inputNumberOfRoomsOptions = selectRoomNumber.querySelectorAll('option');
+// var inputNumberOfBedroomsOptions = selectGuestNumber.querySelector('option');
 
-// var inputNumberOfRoomsOptions = inputNumberOfRooms.querySelectorAll('option');
-// var inputNumberOfBedroomsOptions = inputNumberOfBedrooms.querySelector('option');
+var selectRoomNumber = noticeForm.querySelector('#room_number');
+var selectGuestNumber = noticeForm.querySelector('#capacity');
 
-function functionName() {
+// function syncRoomsFuests() {
+//   for (var j = 0; j < numberOfRooms.options.length; j++) {
+//     var option = numberOfRooms.options[j];
+//     if (option.value === '1') {
+//       numberOfBedrooms.options[0].disabled = true;
+//       numberOfBedrooms.options[1].disabled = false;
+//       numberOfBedrooms.options[3].disabled = true;
+//     } else if (option.value === 2) {
+//       numberOfBedrooms.options[0].disabled = false;
+//       numberOfBedrooms.options[3].disabled = true;
+//     } else if (option.value === 3) {
+//       numberOfBedrooms.options[0].disabled = true;
+//       numberOfBedrooms.options[1].disabled = true;
+//       numberOfBedrooms.options[2].disabled = true;
+//     } else if (option.value === 0) {
+//       numberOfBedrooms.options[0].disabled = true;
+//       numberOfBedrooms.options[1].disabled = true;
+//       numberOfBedrooms.options[3].disabled = true;
+//     }
+//   }
+// }
+
+function syncRoomsGuests() {
+
+  // for (var j = 0; j < numberOfRooms.options.length; j++) {
+  //   var option = numberOfRooms.options[j];
+  setAllOptions();
+  switch (numberOfRooms.value) {
+    case '1':
+      numberOfBedrooms.options[0].disabled = true;
+      numberOfBedrooms.options[1].disabled = true;
+      numberOfBedrooms.options[3].disabled = true;
+      break;
+    case '2':
+      numberOfBedrooms.options[0].disabled = true;
+      numberOfBedrooms.options[3].disabled = true;
+      break;
+    case '3':
+      numberOfBedrooms.options[3].disabled = true;
+      break;
+    case '100':
+      numberOfBedrooms.options[0].disabled = true;
+      numberOfBedrooms.options[1].disabled = true;
+      numberOfBedrooms.options[2].disabled = true;
+      break;
+  }
+}
+// }
+// for (var j = 0; j < numberOfRooms.options.length; j++) {
+// var option = numberOfRooms.options[j];
+function setAllOptions() {
   for (var j = 0; j < numberOfRooms.options.length; j++) {
-    var option = numberOfRooms.options[j];
-    if (option.value === '1') {
-      numberOfBedrooms[2].setAttribute('disabled', 'disabled');
+
+    if (numberOfBedrooms.options[j].getAttribute('disabled', 'disabled')) {
+      numberOfBedrooms.options[j].removeAttribute('disabled', false);
+    }
+    if (numberOfBedrooms.options[j].selected === true) {
+      numberOfBedrooms.options[j].removeAttribute('selected');
     }
   }
 }
 
-function functionNameReset() {
-  for (var j = 0; j < numberOfBedrooms.options.length; j++) {
-    numberOfBedrooms[j].removeAttribute('disabled', 'disabled');
-  }
-}
-
-
-var avc = noticeForm.querySelector('#room_number');
-var avcn = noticeForm.querySelector('#capacity');
-
-avc.addEventListener('change', functionName);
+selectRoomNumber.addEventListener('change', syncRoomsGuests);

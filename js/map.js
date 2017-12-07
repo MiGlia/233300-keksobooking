@@ -296,25 +296,17 @@ for (var i = 0; i < mapPinsList.length; i++) {
   popupClose.addEventListener('keydown', onPopupEnterPress);
 }
 
-var chcekIn = noticeForm.querySelector('#timein');
-var chcekOut = noticeForm.querySelector('#timeout');
-//
-// function functionName() {
-//   switch (chcekIn.value) {
-//     case '12:00':
-//       chcekOut.value = chcekIn.value;
-//       break;
-//     case '13:00':
-//       chcekOut.value = chcekIn.value;
-//       break;
-//     case '14:00':
-//       chcekOut.value = chcekIn.value;
-//       break;
-//   }
-// }
-//
-// chcekIn.addEventListener('change', functionName);
+// Объявляем Переменные
+var selectChcekIn = noticeForm.querySelector('#timein');
+var selectChcekOut = noticeForm.querySelector('#timeout');
+var inputPriceForNight = noticeForm.querySelector('#price');
+var selectTypeOfHouse = noticeForm.querySelector('#type');
+var selectRoomNumber = noticeForm.querySelector('#room_number');
+var numberOfRooms = noticeForm.elements.rooms;
+var numberOfBedrooms = noticeForm.elements.capacity;
+var inputTitleOffer = noticeForm.querySelector('#title');
 
+// Синхронизируем времяя заезда-время выезда
 function syncCheckInOut(chcekInValue, chcekOutValue) {
   switch (chcekInValue.value) {
     case '12:00':
@@ -329,106 +321,123 @@ function syncCheckInOut(chcekInValue, chcekOutValue) {
   }
 }
 
-chcekIn.addEventListener('change', function () {
-  syncCheckInOut(chcekIn, chcekOut);
-});
+// Сброс значения минимальной цены
+inputPriceForNight.setAttribute('value', 0);
 
-chcekOut.addEventListener('change', function () {
-  syncCheckInOut(chcekOut, chcekIn);
-});
-
-var priceForNight = noticeForm.querySelector('#price');
-var typeOfHouse = noticeForm.querySelector('#type');
-
-priceForNight.setAttribute('value', 0);
-
+// Синхронизируем поля типа жилья и минимальной цены
 function sincPriceToNigth() {
-  switch (typeOfHouse.value) {
+  switch (selectTypeOfHouse.value) {
     case 'flat':
-      priceForNight.setAttribute('value', 0);
+      inputPriceForNight.setAttribute('value', 0);
       break;
     case 'bungalo':
-      priceForNight.setAttribute('value', 1000);
+      inputPriceForNight.setAttribute('value', 1000);
       break;
     case 'house':
-      priceForNight.setAttribute('value', 5000);
+      inputPriceForNight.setAttribute('value', 5000);
       break;
     case 'palace':
-      priceForNight.setAttribute('value', 10000);
+      inputPriceForNight.setAttribute('value', 10000);
       break;
   }
 }
 
-typeOfHouse.addEventListener('change', sincPriceToNigth);
+// Сбрасываем атрибуты disabled и selected при каждом именении options. Проверяем на наличие атрибута disabled и selected
+function setAllOptions() {
+  for (var j = 0; j < numberOfRooms.options.length; j++) {
+    if (numberOfBedrooms.options[j].hasAttribute('disabled', 'disabled')) {
+      numberOfBedrooms.options[j].removeAttribute('disabled', false);
+    }
+    if (numberOfBedrooms.options[j].hasAttribute('selected', true)) {
+      numberOfBedrooms.options[j].removeAttribute('selected');
+    }
+  }
+}
 
-var numberOfRooms = noticeForm.elements.rooms;
-var numberOfBedrooms = noticeForm.elements.capacity;
-// var inputNumberOfRoomsOptions = selectRoomNumber.querySelectorAll('option');
-// var inputNumberOfBedroomsOptions = selectGuestNumber.querySelector('option');
-
-var selectRoomNumber = noticeForm.querySelector('#room_number');
-var selectGuestNumber = noticeForm.querySelector('#capacity');
-
-// function syncRoomsFuests() {
-//   for (var j = 0; j < numberOfRooms.options.length; j++) {
-//     var option = numberOfRooms.options[j];
-//     if (option.value === '1') {
-//       numberOfBedrooms.options[0].disabled = true;
-//       numberOfBedrooms.options[1].disabled = false;
-//       numberOfBedrooms.options[3].disabled = true;
-//     } else if (option.value === 2) {
-//       numberOfBedrooms.options[0].disabled = false;
-//       numberOfBedrooms.options[3].disabled = true;
-//     } else if (option.value === 3) {
-//       numberOfBedrooms.options[0].disabled = true;
-//       numberOfBedrooms.options[1].disabled = true;
-//       numberOfBedrooms.options[2].disabled = true;
-//     } else if (option.value === 0) {
-//       numberOfBedrooms.options[0].disabled = true;
-//       numberOfBedrooms.options[1].disabled = true;
-//       numberOfBedrooms.options[3].disabled = true;
-//     }
-//   }
-// }
-
+//  Сравниваем атрибут value комнат, если равны то добавляем атрибут disabled
+// 1 комната — «для одного гостя»
+// 2 комнаты — «для 2-х или 1-го гостя»
+// 3 комнаты — «для 2-х, 1-го или 3-х гостей»
+// 100 комнат — «не для гостей»
 function syncRoomsGuests() {
-
-  // for (var j = 0; j < numberOfRooms.options.length; j++) {
-  //   var option = numberOfRooms.options[j];
   setAllOptions();
   switch (numberOfRooms.value) {
     case '1':
       numberOfBedrooms.options[0].disabled = true;
       numberOfBedrooms.options[1].disabled = true;
       numberOfBedrooms.options[3].disabled = true;
+      numberOfBedrooms.options[2].selected = true;
       break;
     case '2':
       numberOfBedrooms.options[0].disabled = true;
       numberOfBedrooms.options[3].disabled = true;
+      numberOfBedrooms.options[2].selected = true;
       break;
     case '3':
       numberOfBedrooms.options[3].disabled = true;
+      numberOfBedrooms.options[2].selected = true;
       break;
     case '100':
       numberOfBedrooms.options[0].disabled = true;
       numberOfBedrooms.options[1].disabled = true;
       numberOfBedrooms.options[2].disabled = true;
+      numberOfBedrooms.options[3].selected = true;
       break;
   }
 }
-// }
-// for (var j = 0; j < numberOfRooms.options.length; j++) {
-// var option = numberOfRooms.options[j];
-function setAllOptions() {
-  for (var j = 0; j < numberOfRooms.options.length; j++) {
 
-    if (numberOfBedrooms.options[j].getAttribute('disabled', 'disabled')) {
-      numberOfBedrooms.options[j].removeAttribute('disabled', false);
-    }
-    if (numberOfBedrooms.options[j].selected === true) {
-      numberOfBedrooms.options[j].removeAttribute('selected');
-    }
+// Выделение красным цветом рамки поля при ошибочном вводе
+var setBorderColor = function (elem) {
+  elem.style.borderWidth = '2px';
+  elem.style.borderColor = 'red';
+};
+
+// Сброс красной рамки
+var resetBorderColor = function (elem) {
+  elem.style.borderWidth = '';
+  elem.style.borderColor = '';
+};
+
+var onInvalidInput = function () {
+  setBorderColor(inputTitleOffer);
+  if (inputTitleOffer.validity.tooShort) {
+    inputTitleOffer.setCustomValidity('Заголовок должен быть не менее 30-ти символов');
+  } else if (inputTitleOffer.validity.tooLong) {
+    inputTitleOffer.setCustomValidity('Заголовок не должен превышать длинну в 100 символов');
+  } else if (inputTitleOffer.validity.valueMissing) {
+    inputTitleOffer.setCustomValidity('Обязательное поле');
+  } else {
+    inputTitleOffer.setCustomValidity('');
+    resetBorderColor(inputTitleOffer);
   }
-}
+};
 
+// Проверка введенной суммы на валидность
+var onInvalidInputPrice = function () {
+  setBorderColor(inputPriceForNight);
+  if (inputPriceForNight.validity.rangeUnderflow) {
+    inputPriceForNight.setCustomValidity('Стоимость жилья не может быть ниже рекомендованной');
+  } else if (inputPriceForNight.validity.rangeOverflow) {
+    inputPriceForNight.setCustomValidity('Цена не должна превышать 1 000 000');
+  } else if (inputPriceForNight.validity.valueMissing) {
+    inputPriceForNight.setCustomValidity('Пожалуйста, введите цену');
+  } else {
+    inputPriceForNight.setCustomValidity('');
+    resetBorderColor(inputPriceForNight);
+  }
+};
+
+// Навешиваем обработчики событий
+// проверка ввода заголовка
+inputTitleOffer.addEventListener('invalid', onInvalidInput);
+// оработчик Изменнеия соответствия времени и цены
+selectChcekIn.addEventListener('change', function () {
+  syncCheckInOut(selectChcekIn, selectChcekOut);
+});
+selectChcekOut.addEventListener('change', function () {
+  syncCheckInOut(selectChcekOut, selectChcekIn);
+});
+selectTypeOfHouse.addEventListener('change', sincPriceToNigth);
+// проверка ввода минимальной цены
+inputPriceForNight.addEventListener('invalid', onInvalidInputPrice);
 selectRoomNumber.addEventListener('change', syncRoomsGuests);

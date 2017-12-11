@@ -85,7 +85,6 @@ function getOfferType(value) {
   return newValue;
 }
 
-// копируем шаблон для карточки с предложением аренды
 var mapElementCard = elementCardtemplate.cloneNode(true);
 var mapCardPlist = mapElementCard.querySelectorAll('p');
 var mapCardUlList = mapElementCard.querySelector('.popup__features');
@@ -419,7 +418,7 @@ var ValidationTargets = {
   'price': onInvalidInputPrice
 };
 
-// обрабочик на валидноси функций onInvalidInputPrice и onInvalidInput
+// обрабочик на валидноси функций onInvalidInputPrice и onInvalidInput(красная линия)
 noticeForm.addEventListener('invalid', function (evt) {
   ValidationTargets[evt.target.id](evt.target);
   evt.target.style.border = '2px solid red';

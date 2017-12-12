@@ -359,7 +359,6 @@ function setAllOptions() {
 // 2 комнаты — «для 2-х или 1-го гостя»
 // 3 комнаты — «для 2-х, 1-го или 3-х гостей»
 // 100 комнат — «не для гостей»
-numberOfBedrooms.options[2].selected = true;
 function syncRoomsGuests() {
   setAllOptions();
   switch (numberOfRooms.value) {
@@ -435,3 +434,5 @@ selectTypeOfHouse.addEventListener('change', sincPriceToNigth);
 // проверка ввода минимальной цены
 inputPriceForNight.addEventListener('invalid', onInvalidInputPrice);
 selectRoomNumber.addEventListener('change', syncRoomsGuests);
+// навесил обработчик, чтобы синкронизация гостей и комнат была сразу
+mainPin.addEventListener('click', syncRoomsGuests);

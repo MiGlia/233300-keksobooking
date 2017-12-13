@@ -1,8 +1,9 @@
 'use strict';
 (function () {
+  // Объявляем переменные
   var mapPinTemplate = document.querySelector('template').content.querySelector('.map__pin');
-  var pinsCount = 8;
   var fragment = document.createDocumentFragment();
+
   // Копируем шаблон(идеальный элемент метку с классои map__pin) и заполняем его новыми данными из сгенерированного массива offers
   function renderMapPin(nearbyOffers, i) {
 
@@ -19,4 +20,9 @@
     fragment.appendChild(mapPinElement);
     return mapPinElement;
   }
+
+  window.pin = {
+    fragment: fragment,
+    renderMapPin: renderMapPin
+  };
 })();

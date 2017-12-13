@@ -1,7 +1,6 @@
 'use strict';
 (function () {
 // Объявляем Переменные
-  var fieldsetsList = noticeForm.querySelectorAll('fieldset');
   var noticeForm = document.querySelector('.notice__form');
   var selectChcekIn = noticeForm.querySelector('#timein');
   var selectChcekOut = noticeForm.querySelector('#timeout');
@@ -149,4 +148,8 @@
   inputPriceForNight.addEventListener('invalid', onInvalidInputPrice);
   selectRoomNumber.addEventListener('change', syncRoomsGuests);
 
+  window.form = {
+    noticeForm: noticeForm,
+    syncRoomsGuests: syncRoomsGuests
+  };
 })();

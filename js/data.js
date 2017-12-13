@@ -40,9 +40,11 @@
     return newOfferFeatures;
   }
 
+  // Объявляем мвссив с данными
+  var nearbyOffers = [];
   // Заполняем массив, состоящий из 8 сгенерированных объектов:
-  window.data = function (nearbyOffersCount) {
 
+  function createArrayOffers(nearbyOffersCount) {
     // Создаем обьекты с max и min координатами X и Y, ценами, количеством комнат, числом гостей
     var coordinates = {
       x: {
@@ -101,8 +103,10 @@
       );
     }
     return nearbyOffers;
+  }
+
+  window.data = {
+    nearbyOffers: nearbyOffers,
+    createArrayOffers: createArrayOffers
   };
-
-  var nearbyOffers = [];
-
 })();

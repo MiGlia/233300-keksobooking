@@ -165,23 +165,6 @@
 
 
   });
-  // КатЯ, ПОДСКАЖИ, ПОЖАЛУЙСТА ПОЧЕМУ ТАК У МЕНЯ НЕ РАБОТАЕ, ЧТО НЕПРАВИЛЬНО?
-  // var pinHeigth = 87;
-  // var limitCoords = {
-  //   top: 100,
-  //   bottom: 500 + pinHeigth
-  // };
-  //
-  // var mainPinCoords = mainPin.getBoundingClientRect();
-  // // ограничение по координатам
-  // function setMainPinLimitCoords() {
-  //   if (mainPinCoords.top < limitCoords.top) {
-  //     mainPin.style.top = limitCoords.top + 'px';
-  //   }
-  //   if (mainPinCoords.bottom > limitCoords.bottom) {
-  //     mainPin.style.top = limitCoords.bottom + 'px';
-  //   }
-  // }
 
   var limitCoords = {
     top: 100,

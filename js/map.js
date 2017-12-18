@@ -2,23 +2,20 @@
 (function () {
 
   // Объявляем переменные
-  var mapParamSearch = document.querySelector('.map');
-  var mainPin = mapParamSearch.querySelector('.map__pin--main');
-  var pinsContainer = mapParamSearch.querySelector('.map__pins');
+  var mainPin = window.pin.mapParamSearch.querySelector('.map__pin--main');
   var fragmentCards = document.createDocumentFragment();
   var fieldsetsList = window.form.noticeForm.querySelectorAll('fieldset');
   var pinsCount = 8;
-  var ESC_KEYCODE = 27;
-  var ENTER_KEYCODE = 13;
 
   // функия акивации карты и формы
   var pageActive = function () {
-    mapParamSearch.classList.remove('map--faded');
+    window.pin.mapParamSearch.classList.remove('map--faded');
     // Добавляем маркеры на страницу
-    pinsContainer.appendChild(window.pin.fragment);
+    window.pin.pinsContainer.appendChild(window.pin.fragment);
     // убираем затемнение и disabled с полей
     window.form.noticeForm.classList.remove('notice__form--disabled');
     removeElementsAttribute(fieldsetsList);
+    window.form.syncRoomsGuests();
   };
 
   // Создаем и заполняем данными массив объектов недвижимости
@@ -28,7 +25,7 @@
   // Заполняем фрагмент данными из массива объектов для отрисовки карточки
   fragmentCards.appendChild(window.card.renderCardElement(window.data.nearbyOffers[0]));
   // Добавляем карточку недвижимости на страницу и скрываем ее
-  mapParamSearch.appendChild(fragmentCards);
+  window.pin.mapParamSearch.appendChild(fragmentCards);
   window.card.mapElementCard.classList.add('hidden');
 
   // акивации карты и формы после отжаития клавиши мыши
@@ -50,73 +47,6 @@
       arr[i].disabled = false;
     }
   }
-
-  // Текущий маркер
-  var currentPin = false;
-  // клик на пин ловим на контейнере
-  function pinClick(evt) {
-    var target = evt.target;
-    // цикл двигается вверх от target к родителям до pinsContainer
-    while (target !== pinsContainer) {
-      if (target.tagName === 'BUTTON') {
-        if (currentPin !== false) {
-          currentPin.classList.remove('map__pin--active');
-        }
-        target.classList.add('map__pin--active');
-        currentPin = target;
-        if (!target.classList.contains('map__pin--main')) {
-        // Заполняем карточку данными из массива объектов
-          window.card.renderCardElement(window.data.nearbyOffers[target.dataset.numPin]);
-          openPopup();
-        }
-        return;
-      }
-      target = target.parentNode;
-    }
-  }
-
-  // Реакция на нажатие ESC
-  var onPopupEscPress = function (evt) {
-    if (evt.keyCode === ESC_KEYCODE) {
-      closePopup();
-    }
-  };
-
-  // Закрыть карточку мышкой
-  var onPopupCloseClick = function () {
-    closePopup();
-  };
-
-  // Закрыть карточку с клавиатуры
-  var onPopupCloseEnterPress = function (evt) {
-    if (evt.keyCode === ENTER_KEYCODE) {
-      closePopup();
-    }
-  };
-
-  // Открыть карточку с клавиатуры
-  var openPopup = function () {
-    window.card.mapElementCard.classList.remove('hidden');
-    document.addEventListener('keydown', onPopupEscPress);
-  };
-
-  // Закрыть карточку
-  var closePopup = function () {
-    window.card.mapElementCard.classList.add('hidden');
-    if (currentPin !== false) {
-      currentPin.classList.remove('map__pin--active');
-      currentPin = false;
-    }
-    document.removeEventListener('keydown', onPopupEscPress);
-  };
-  var mapCardClose = window.card.mapElementCard.querySelector('.popup__close');
-  // Навешиваем обработчики событий (открытия)
-  pinsContainer.addEventListener('click', pinClick);
-  // Закрытие карточки по нажатию мышки
-  mapCardClose.addEventListener('click', onPopupCloseClick);
-  // Закрытие карточки с клавиатуры
-  mapCardClose.addEventListener('keydown', onPopupCloseEnterPress);
-  mainPin.addEventListener('click', window.form.syncRoomsGuests);
 
   // =======================================
 
@@ -155,14 +85,13 @@
       var houseLocation = 'x:' + addressY + ', ' + 'y:' + addressX;
       inputAddress.setAttribute('value', houseLocation);
       // удаляем обработчики события передвижения мыши и отпускания кнопки мыши
-      mapParamSearch.removeEventListener('mousemove', onMouseMove);
-      mapParamSearch.removeEventListener('mouseup', onMouseUp);
+      window.pin.mapParamSearch.removeEventListener('mousemove', onMouseMove);
+      window.pin.mapParamSearch.removeEventListener('mouseup', onMouseUp);
 
     }
     // добавляем обработчики события передвижения мыши и отпускания кнопки мыши
-    mapParamSearch.addEventListener('mousemove', onMouseMove);
-    mapParamSearch.addEventListener('mouseup', onMouseUp);
-
+    window.pin.mapParamSearch.addEventListener('mousemove', onMouseMove);
+    window.pin.mapParamSearch.addEventListener('mouseup', onMouseUp);
 
   });
 
@@ -180,4 +109,7 @@
       mainPin.style.top = limitCoords.bottom + 'px';
     }
   }
+
+  // функция показа карточки
+  window.showCard();
 })();

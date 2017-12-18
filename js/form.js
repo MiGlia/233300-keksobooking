@@ -10,51 +10,18 @@
   var numberOfRooms = noticeForm.elements.rooms;
   var numberOfBedrooms = noticeForm.elements.capacity;
   var inputTitleOffer = noticeForm.querySelector('#title');
+  var TYPES_OF_HOUSES = ['bungalo', 'flat', 'house', 'palace'];
+  var MIN_PRICES = [0, 1000, 5000, 10000];
+  var CHECK_TIMES = ['12:00', '13:00', '14:00'];
 
-  // Синхронизируем времяя заезда-время выезда
-  function syncCheckInOut(chcekInValue, chcekOutValue) {
-    switch (chcekInValue.value) {
-      case '12:00':
-        chcekOutValue.value = chcekInValue.value;
-        break;
-      case '13:00':
-        chcekOutValue.value = chcekInValue.value;
-        break;
-      case '14:00':
-        chcekOutValue.value = chcekInValue.value;
-        break;
-    }
-  }
+  // функции для синхронизации
+  var syncValues = function (element, value) {
+    element.value = value;
+  };
 
-  // Сброс значения минимальной цены
-  inputPriceForNight.setAttribute('value', 1000);
-
-  // Синхронизируем поля типа жилья и минимальной цены
-  // Устанавливаем мин и мах для каждого типа
-  function sincPriceToNigth() {
-    switch (selectTypeOfHouse.value) {
-      case 'flat':
-        inputPriceForNight.setAttribute('value', 1000);
-        inputPriceForNight.setAttribute('min', 1000);
-        inputPriceForNight.setAttribute('max', 1000000);
-        break;
-      case 'bungalo':
-        inputPriceForNight.setAttribute('value', 0);
-        inputPriceForNight.setAttribute('min', 0);
-        inputPriceForNight.setAttribute('max', 1000000);
-        break;
-      case 'house':
-        inputPriceForNight.setAttribute('value', 5000);
-        inputPriceForNight.setAttribute('min', 5000);
-        inputPriceForNight.setAttribute('max', 1000000);
-        break;
-      case 'palace':
-        inputPriceForNight.setAttribute('value', 10000);
-        inputPriceForNight.setAttribute('min', 10000);
-        inputPriceForNight.setAttribute('max', 1000000);
-        break;
-    }
-  }
+  var syncValueWithMin = function (element, value) {
+    element.min = value;
+  };
 
   // Сбрасываем атрибуты disabled и selected при каждом именении options. Проверяем на наличие атрибута disabled и selected
   function setAllOptions() {
@@ -136,14 +103,21 @@
     evt.target.style.border = '2px solid red';
   }, true);
   inputTitleOffer.addEventListener('invalid', onInvalidInput);
-  // оработчик Изменнеия соответствия времени и цены
+  // Обработчики на Синхронизацию времени заезда-время
+  //  поля типа жилья и минимальной цены
   selectChcekIn.addEventListener('change', function () {
-    syncCheckInOut(selectChcekIn, selectChcekOut);
+    window.synchronizeFields(selectChcekIn, selectChcekOut, CHECK_TIMES, CHECK_TIMES, syncValues);
   });
   selectChcekOut.addEventListener('change', function () {
-    syncCheckInOut(selectChcekOut, selectChcekIn);
+    window.synchronizeFields(selectChcekOut, selectChcekIn, CHECK_TIMES, CHECK_TIMES, syncValues);
   });
-  selectTypeOfHouse.addEventListener('change', sincPriceToNigth);
+  selectTypeOfHouse.addEventListener('change', function () {
+    window.synchronizeFields(selectTypeOfHouse, inputPriceForNight, TYPES_OF_HOUSES, MIN_PRICES, syncValueWithMin);
+  });
+  selectTypeOfHouse.addEventListener('change', function () {
+    window.synchronizeFields(selectTypeOfHouse, inputPriceForNight, TYPES_OF_HOUSES, MIN_PRICES, syncValues);
+  });
+
   // проверка ввода минимальной цены
   inputPriceForNight.addEventListener('invalid', onInvalidInputPrice);
   selectRoomNumber.addEventListener('change', syncRoomsGuests);

@@ -3,6 +3,8 @@
   // Объявляем переменные
   var mapPinTemplate = document.querySelector('template').content.querySelector('.map__pin');
   var fragment = document.createDocumentFragment();
+  var mapParamSearch = document.querySelector('.map');
+  var pinsContainer = mapParamSearch.querySelector('.map__pins');
 
   // Копируем шаблон(идеальный элемент метку с классои map__pin) и заполняем его новыми данными из сгенерированного массива offers
   function renderMapPin(nearbyOffers, i) {
@@ -23,6 +25,8 @@
 
   window.pin = {
     fragment: fragment,
-    renderMapPin: renderMapPin
+    renderMapPin: renderMapPin,
+    mapParamSearch: mapParamSearch,
+    pinsContainer: pinsContainer
   };
 })();

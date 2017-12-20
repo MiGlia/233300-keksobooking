@@ -6,6 +6,7 @@
   var fragmentCards = document.createDocumentFragment();
   var fieldsetsList = window.form.noticeForm.querySelectorAll('fieldset');
   var pinsCount = 8;
+  var nearbyOffers = [];
 
   // функия акивации карты и формы
   var pageActive = function () {
@@ -18,12 +19,18 @@
     window.form.syncRoomsGuests();
   };
 
-  // Создаем и заполняем данными массив объектов недвижимости
-  window.data.nearbyOffers = window.data.createArrayOffers(pinsCount);
-  // Переносим данные из массива объектов во фрагмент с маркерами для вставки на страницу
-  window.data.nearbyOffers.forEach(window.pin.renderMapPin);
-  // Заполняем фрагмент данными из массива объектов для отрисовки карточки
-  fragmentCards.appendChild(window.card.renderCardElement(window.data.nearbyOffers[0]));
+  var successHandler = function (arrData) {
+    arrData.forEach(window.pin.renderMapPin, window.pin.fragment);
+    nearbyOffers = arrData;
+  };
+  window.backend.load(successHandler, window.backend.errorHandler);
+
+  // // Создаем и заполняем данными массив объектов недвижимости
+  // window.data.nearbyOffers = window.data.createArrayOffers(pinsCount);
+  // // Переносим данные из массива объектов во фрагмент с маркерами для вставки на страницу
+  // window.data.nearbyOffers.forEach(window.pin.renderMapPin);
+  // // Заполняем фрагмент данными из массива объектов для отрисовки карточки
+  // fragmentCards.appendChild(window.card.renderCardElement(window.data.nearbyOffers[0]));
   // Добавляем карточку недвижимости на страницу и скрываем ее
   window.pin.mapParamSearch.appendChild(fragmentCards);
   window.card.mapElementCard.classList.add('hidden');

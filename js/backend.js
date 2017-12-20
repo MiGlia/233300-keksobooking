@@ -1,14 +1,14 @@
 'use strict';
 (function () {
-  var SERVER_URL = 'https://1510.dump.academy/keksobooking/data';
+  var SERVER_URL = 'https://1510.dump.academy/keksobooking';
 
-  var setup = function (onSuccess, onError) {
+  var setup = function (onLoad, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
       if (xhr.status === 200) {
-        onSuccess(xhr.response);
+        onLoad(xhr.response);
       } else {
         onError(xhr.response);
       }
@@ -37,9 +37,21 @@
     xhr.send(data);
   }
 
-  window.beckend = {
+  function errorHandler(errorMessage) {
+    var node = document.createElement('div');
+    node.style = 'z-index: 100; margin: 5px auto; text-align: center; background-color: magenta; border: 2px solid black';
+    node.style.position = 'absolute';
+    node.style.left = 0;
+    node.style.right = 0;
+    node.style.fontSize = '30px';
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', node);
+  }
+
+  window.backend = {
     load: load,
-    save: save
+    save: save,
+    errorHandler: errorHandler
   };
 
 })();

@@ -1,75 +1,80 @@
 'use strict';
 (function () {
-  window.showCard = function () {
   // Объявляем переменные
-    var mapCardClose = window.card.mapElementCard.querySelector('.popup__close');
-    var ESC_KEYCODE = 27;
-    var ENTER_KEYCODE = 13;
-    // Текущий маркер
-    var currentPin = false;
+  var mapCardClose = window.card.mapElementCard.querySelector('.popup__close');
+  var ESC_KEYCODE = 27;
+  var ENTER_KEYCODE = 13;
+  // Текущий маркер
+  var currentPin = false;
 
-    // клик на пин ловим на контейнере
-    function show(evt) {
-      var target = evt.target;
-      // цикл двигается вверх от target к родителям до pinsContainer
-      while (target !== window.pin.pinsContainer) {
-        if (target.tagName === 'BUTTON') {
-          if (currentPin !== false) {
-            currentPin.classList.remove('map__pin--active');
-          }
-          target.classList.add('map__pin--active');
-          currentPin = target;
-          if (!target.classList.contains('map__pin--main')) {
-          // Заполняем карточку данными из массива объектов
-            window.card.renderCardElement(window.data.nearbyOffers[target.dataset.numPin]);
-            openPopup();
-          }
-          return;
+  function showCard(elem, arrOffers, pin) {
+    var clickedElement = elem;
+    while (clickedElement !== pin) {
+      if (clickedElement.tagName === 'BUTTON') {
+        if (currentPin !== false) {
+          currentPin.classList.remove('map__pin--active');
         }
-        target = target.parentNode;
+        elem.classList.add('map__pin--active');
+        clickedElement.classList.add('map__pin--active');
+        currentPin = clickedElement;
+        if (!clickedElement.classList.contains('map__pin--main')) {
+          // Заполняем карточку данными из массива объектов
+          window.card.renderCardElement(arrOffers[clickedElement.dataset.numPin]);
+          openPopup();
+        } else {
+          window.card.mapElementCard.classList.add('hidden');
+        }
       }
+      clickedElement = clickedElement.parentNode;
     }
+    return window.card.mapElementCard;
+  }
 
-    // Реакция на нажатие ESC
-    var onPopupEscPress = function (evt) {
-      if (evt.keyCode === ESC_KEYCODE) {
-        closePopup();
-      }
-    };
+
+  // Реакция на нажатие ESC
+  var onPopupEscPress = function (evt) {
+    if (evt.keyCode === ESC_KEYCODE) {
+      closePopup();
+    }
+  };
 
     // Закрыть карточку мышкой
-    var onPopupCloseClick = function () {
-      closePopup();
-    };
+  var onPopupCloseClick = function () {
+    closePopup();
+  };
 
     // Закрыть карточку с клавиатуры
-    var onPopupCloseEnterPress = function (evt) {
-      if (evt.keyCode === ENTER_KEYCODE) {
-        closePopup();
-      }
-    };
+  var onPopupCloseEnterPress = function (evt) {
+    if (evt.keyCode === ENTER_KEYCODE) {
+      closePopup();
+    }
+  };
 
     // Открыть карточку с клавиатуры
-    var openPopup = function () {
-      window.card.mapElementCard.classList.remove('hidden');
-      document.addEventListener('keydown', onPopupEscPress);
-    };
+  var openPopup = function () {
+    window.card.mapElementCard.classList.remove('hidden');
+    document.addEventListener('keydown', onPopupEscPress);
+  };
 
     // Закрыть карточку
-    var closePopup = function () {
-      window.card.mapElementCard.classList.add('hidden');
-      if (currentPin !== false) {
-        currentPin.classList.remove('map__pin--active');
-        currentPin = false;
-      }
-      document.removeEventListener('keydown', onPopupEscPress);
-    };
+  var closePopup = function () {
+    window.card.mapElementCard.classList.add('hidden');
+    if (currentPin !== false) {
+      currentPin.classList.remove('map__pin--active');
+      currentPin = false;
+    }
+    document.removeEventListener('keydown', onPopupEscPress);
+  };
 
     // Навешиваем обработчики событий (открытия)
-    window.pin.pinsContainer.addEventListener('click', show);
-    // Закрытие карточки по нажатию мышки
-    mapCardClose.addEventListener('click', onPopupCloseClick);
-    // Закрытие карточки с клавиатуры
-    mapCardClose.addEventListener('keydown', onPopupCloseEnterPress);
+  window.pin.pinsContainer.addEventListener('click', showCard);
+  // Закрытие карточки по нажатию мышки
+  mapCardClose.addEventListener('click', onPopupCloseClick);
+  // Закрытие карточки с клавиатуры
+  mapCardClose.addEventListener('keydown', onPopupCloseEnterPress);
+  // };
+
+  window.showCard = {
+    showCard: showCard
   };
 })();

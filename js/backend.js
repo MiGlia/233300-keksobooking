@@ -1,13 +1,15 @@
 'use strict';
 (function () {
   var SERVER_URL = 'https://1510.dump.academy/keksobooking';
+  var serverTime = 10000;
+  var statusLoadOk = 200;
 
   var setup = function (onLoad, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
+      if (xhr.status === statusLoadOk) {
         onLoad(xhr.response);
       } else {
         onError(xhr.response);
@@ -20,7 +22,7 @@
       onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
 
-    xhr.timeout = 10000; // 10s
+    xhr.timeout = serverTime; // 10s
 
     return xhr;
   };
@@ -39,8 +41,8 @@
 
   function errorHandler(errorMessage) {
     var node = document.createElement('div');
-    node.style = 'z-index: 100; margin: 5px auto; text-align: center; background-color: magenta; border: 2px solid black';
-    node.style.position = 'absolute';
+    node.style = 'z-index: 100; margin: 5px auto; text-align: center; background-color: red; border: 2px solid black';
+    node.style.position = 'fixed';
     node.style.left = 0;
     node.style.right = 0;
     node.style.fontSize = '30px';

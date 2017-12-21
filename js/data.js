@@ -9,40 +9,40 @@
 //   var OFFER_CHECKOUT = ['12:00', '13:00', '14:00'];
 //   var OFFER_PHOTOS = [];
 
-  // Заполняем массив NUMBER_AVATAR_IMG
-  // function createArrayAvatar(count) {
-  //   for (var i = 0; i < count; i++) {
-  //     NUMBER_AVATAR_IMG.push([i + 1]);
-  //   }
-  //   return NUMBER_AVATAR_IMG;
-  // }
-  // createArrayAvatar(8);
+// Заполняем массив NUMBER_AVATAR_IMG
+// function createArrayAvatar(count) {
+//   for (var i = 0; i < count; i++) {
+//     NUMBER_AVATAR_IMG.push([i + 1]);
+//   }
+//   return NUMBER_AVATAR_IMG;
+// }
+// createArrayAvatar(8);
 
-  // Возвращаем случайный элемент в массиве
-  // function getRandomArrayIndex(arr) {
-  //   return arr[Math.floor(Math.random() * arr.length)];
-  // }
-  //
-  // // Возвращаем случайный элемент в массиве и сразу его удаляем из массива
-  // function getRandomNorepeatArrayIndex(arr) {
-  //   return arr.splice(Math.floor(Math.random() * arr.length), 1);
-  // }
-  //
-  // // Возвращаем ислучайное число между min (включительно) и max (не включая max)
-  // function getRandomValue(min, max) {
-  //   return Math.floor(Math.random() * (max - min)) + min;
-  // }
+// Возвращаем случайный элемент в массиве
+// function getRandomArrayIndex(arr) {
+//   return arr[Math.floor(Math.random() * arr.length)];
+// }
+//
+// // Возвращаем случайный элемент в массиве и сразу его удаляем из массива
+// function getRandomNorepeatArrayIndex(arr) {
+//   return arr.splice(Math.floor(Math.random() * arr.length), 1);
+// }
+//
+// // Возвращаем ислучайное число между min (включительно) и max (не включая max)
+// function getRandomValue(min, max) {
+//   return Math.floor(Math.random() * (max - min)) + min;
+// }
 
-  // Коприруем и возвращаем массив OFFER_FEATURES со случайной длиной
-  // function getNewOfferFeatures() {
-  //   var newOfferFeatures = OFFER_FEATURES.slice();
-  //   newOfferFeatures.length = getRandomValue(1, 6);
-  //   return newOfferFeatures;
-  // }
+// Коприруем и возвращаем массив OFFER_FEATURES со случайной длиной
+// function getNewOfferFeatures() {
+//   var newOfferFeatures = OFFER_FEATURES.slice();
+//   newOfferFeatures.length = getRandomValue(1, 6);
+//   return newOfferFeatures;
+// }
 
-  // Объявляем мвссив с данными
-  // var nearbyOffers = [];
-  // Заполняем массив, состоящий из 8 сгенерированных объектов:
+// Объявляем мвссив с данными
+// var nearbyOffers = [];
+// Заполняем массив, состоящий из 8 сгенерированных объектов:
 
 //   function createArrayOffers(nearbyOffersCount) {
 //     // Создаем обьекты с max и min координатами X и Y, ценами, количеством комнат, числом гостей

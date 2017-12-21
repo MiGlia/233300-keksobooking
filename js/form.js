@@ -6,7 +6,7 @@
   var selectChcekOut = noticeForm.querySelector('#timeout');
   var inputPriceForNight = noticeForm.querySelector('#price');
   var selectTypeOfHouse = noticeForm.querySelector('#type');
-  var selectRoomNumber = noticeForm.querySelector('#room_number');
+  // var selectRoomNumber = noticeForm.querySelector('#room_number');
   var numberOfRooms = noticeForm.elements.rooms;
   var numberOfBedrooms = noticeForm.elements.capacity;
   var inputTitleOffer = noticeForm.querySelector('#title');
@@ -33,6 +33,18 @@
         numberOfBedrooms.options[j].removeAttribute('selected');
       }
     }
+  }
+
+  // сброс данных при успешной отправуе
+  function formReset() {
+    inputTitleOffer.value = 'Милая, уютная квартирка в центре Токио';
+    window.mainPin.inputAddress.value = window.mainPin.mainPin.value;
+    selectTypeOfHouse.value = 'flat';
+    inputPriceForNight.value = '1000';
+    selectChcekIn.value = '12:00';
+    selectChcekOut.value = '12:00';
+    numberOfRooms.value = '1';
+    numberOfBedrooms.value = '1';
   }
   //  Сравниваем атрибут value комнат, если равны то добавляем атрибут disabled
   // 1 комната — «для одного гостя»
@@ -91,6 +103,12 @@
     }
   };
 
+  // обработчик отправка данных на сервер
+  noticeForm.addEventListener('submit', function (evt) {
+    window.backend.save(new FormData(noticeForm), formReset, window.backend.errorHandler);
+    evt.preventDefault();
+  });
+
   // Создаем объект с функциями на валидность форм
   var ValidationTargets = {
     'title': onInvalidInput,
@@ -120,7 +138,7 @@
 
   // проверка ввода минимальной цены
   inputPriceForNight.addEventListener('invalid', onInvalidInputPrice);
-  selectRoomNumber.addEventListener('change', syncRoomsGuests);
+  numberOfRooms.addEventListener('change', syncRoomsGuests);
 
   window.form = {
     noticeForm: noticeForm,

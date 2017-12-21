@@ -8,6 +8,10 @@
   var getStringFeatures = function (elem) {
     return '<li class="feature feature--' + elem + '"></li>';
   };
+  // Формирование фото предложений
+  var getStringPicture = function (elem) {
+    return '<li><img src="' + elem + '"></li>';
+  };
 
   // Сравниваем и заменяем тип жилья
   function getOfferType(value) {
@@ -30,6 +34,7 @@
   function renderCardElement(arr) {
     var mapCardPlist = mapElementCard.querySelectorAll('p');
     var mapCardUlList = mapElementCard.querySelector('.popup__features');
+    var mapCardPictureList = mapElementCard.querySelector('.popup__pictures');
     // находим шаблон для карточки с предложением аренды
     mapElementCard.querySelector('h3').textContent = arr.offer.title;
     mapElementCard.querySelector('p small').textContent = arr.offer.address;
@@ -42,6 +47,9 @@
     mapCardUlList.innerHTML = '';
     mapCardUlList.insertAdjacentHTML('afterBegin', arr.offer.features.map(getStringFeatures).join(' '));
     mapElementCard.appendChild(mapCardUlList);
+    mapCardPictureList.innerHTML = '';
+    mapCardPictureList.insertAdjacentHTML('afterBegin', arr.offer.photos.map(getStringPicture).join(' '));
+    mapElementCard.appendChild(mapCardPictureList);
     return mapElementCard;
   }
 

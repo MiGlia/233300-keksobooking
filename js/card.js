@@ -3,10 +3,15 @@
 // Объявляем переменные
   var elementCardtemplate = document.querySelector('template').content.querySelector('.map__card');
   var mapElementCard = elementCardtemplate.cloneNode(true);
+  var mapCardPicture = mapElementCard.querySelector('.popup__pictures');
 
   // Формирование списком удобства
   var getStringFeatures = function (elem) {
     return '<li class="feature feature--' + elem + '"></li>';
+  };
+  // Формирование фото предложений
+  var getStringPicture = function (elem) {
+    return '<li><img src="' + elem + '"></li>';
   };
 
   // Сравниваем и заменяем тип жилья
@@ -42,11 +47,15 @@
     mapCardUlList.innerHTML = '';
     mapCardUlList.insertAdjacentHTML('afterBegin', arr.offer.features.map(getStringFeatures).join(' '));
     mapElementCard.appendChild(mapCardUlList);
+    mapCardPicture.innerHTML = '';
+    mapCardPicture.insertAdjacentHTML('afterBegin', arr.offer.photos.map(getStringPicture).join(' '));
+    mapElementCard.appendChild(mapCardPicture);
+
     return mapElementCard;
   }
 
   window.card = {
     mapElementCard: mapElementCard,
-    renderCardElement: renderCardElement
+    renderCardElement: renderCardElement,
   };
 })();

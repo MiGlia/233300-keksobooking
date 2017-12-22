@@ -6,6 +6,7 @@
   var mapParamSearch = document.querySelector('.map');
   var pinsContainer = mapParamSearch.querySelector('.map__pins');
 
+
   // Копируем шаблон(идеальный элемент метку с классои map__pin) и заполняем его новыми данными из сгенерированного массива offers
   function renderMapPin(nearbyOffers, i) {
 

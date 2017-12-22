@@ -109,14 +109,14 @@
   });
 
   // Создаем объект с функциями на валидность форм
-  var ValidationTargets = {
+  var validationTargets = {
     'title': onInvalidInput,
     'price': onInvalidInputPrice
   };
 
   // обрабочик на валидноси функций onInvalidInputPrice и onInvalidInput(красная линия)
   noticeForm.addEventListener('invalid', function (evt) {
-    ValidationTargets[evt.target.id](evt.target);
+    validationTargets[evt.target.id](evt.target);
     evt.target.style.border = '2px solid red';
   }, true);
   inputTitleOffer.addEventListener('invalid', onInvalidInput);

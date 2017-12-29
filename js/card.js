@@ -6,13 +6,13 @@
   var mapCardPicture = mapElementCard.querySelector('.popup__pictures');
 
   // Формирование списком удобства
-  var getStringFeatures = function (elem) {
+  function getStringFeatures(elem) {
     return '<li class="feature feature--' + elem + '"></li>';
-  };
+  }
   // Формирование фото предложений
-  var getStringPicture = function (elem) {
+  function getStringPicture(elem) {
     return '<li><img src="' + elem + '"></li>';
-  };
+  }
 
   // Сравниваем и заменяем тип жилья
   function getOfferType(value) {

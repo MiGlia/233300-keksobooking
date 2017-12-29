@@ -7,7 +7,7 @@
   // Текущий маркер
   var currentPin = false;
 
-  function showCard(elem, arrOffers, pin) {
+  function showCard(elem, pin) {
     var clickedElement = elem;
     while (clickedElement !== pin) {
       if (clickedElement.tagName === 'BUTTON') {
@@ -19,7 +19,7 @@
         currentPin = clickedElement;
         if (!clickedElement.classList.contains('map__pin--main')) {
           // Заполняем карточку данными из массива объектов
-          window.card.renderCardElement(arrOffers[clickedElement.dataset.numPin]);
+          window.card.renderCardElement(window.filterMap.arrTemp[clickedElement.dataset.numPin]);
           openPopup();
         } else {
           window.card.mapElementCard.classList.add('hidden');

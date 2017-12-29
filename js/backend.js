@@ -1,7 +1,7 @@
 'use strict';
 (function () {
   var SERVER_URL = 'https://1510.dump.academy/keksobooking';
-  var serverTime = 10000;
+  var serverTime = 30000;
   var statusLoadOk = 200;
 
   var setup = function (onLoad, onError) {

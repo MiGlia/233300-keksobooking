@@ -23,11 +23,24 @@
     return arrayCopy;
   }
 
+  // Функция для перемешивания массива
+  function compareRandom(a, b) {
+
+    if (a > b) {
+      return 1;
+    }
+    if (a < b) {
+      return -1;
+    }
+    return Math.random() - 0.5;
+  }
+
   window.util = {
     getRandomValue: getRandomValue,
     getIndividRandomValueFromArray: getIndividRandomValueFromArray,
     getRandomValueFromArray: getRandomValueFromArray,
-    getRandomArray: getRandomArray
+    getRandomArray: getRandomArray,
+    compareNumeric: compareRandom
   };
 
 })();
